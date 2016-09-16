@@ -12,7 +12,6 @@ set mouse=a                 " 可以使用鼠标
 set mousemodel=popup        " 右键单击窗口时弹出快捷菜单???好像没什么用
 set cursorline              " 高亮光标所在行
 set cursorcolumn            " 高亮光标所在列
-autocmd InsertEnter * se cul    " 用浅色高亮当前行  
 
 "++++++++++++++++++++++++++++++空白与缩进+++++++++++++++++++++++++++++++++++++
 set sw=4	 	    		" 缩进代码时，缩进量为4
@@ -162,8 +161,7 @@ map! <C-Z> <Esc>zzi
 map <C-A> <Esc>ggVG$
 " 选中状态下 Ctrl+c 复制
 "map <C-v> "+p
-imap <C-v> <Esc>"+pa
-cmap <C-v> <C-r>+
+map! <C-v> <C-r>+
 vmap <C-c> "+y
 "比较文件  
 nnoremap <F2> :vert diffsplit 
@@ -268,43 +266,42 @@ set statusline+=%{fugitive#statusline()}    " show Git hotness
 " indentLine: 缩进对齐线
 Plugin 'Yggdroot/indentLine'
 let g:indentLine_char = '┊'                 " this feature only works with files whose encoding is UTF-8
+let g:indentLine_color_term = 239           " change charactor color
 
 " L9: vim-scripts repos
 Plugin 'L9'                                 " usage: see source code???还是不知道干什么用的。。。
 
-" FuzzyFinder: 文件查找, 功能很强大，具体有待研究
-Plugin 'FuzzyFinder'
-
-" command-t: 快速定位文件, 执行CommandT会出错?????
-Plugin 'wincent/command-t'
-
 " Auto-Pairs: 插入或删除括号和双引号时自动配对
 Plugin 'Auto-Pairs'
+
+" EasyMotion: 一个快速跳转工具
+" 使用空格 + {w,f,F,b,e}
+Plugin 'EasyMotion'
+let g:EasyMotion_leader_key='<Space>'
+
+" vim-scripts/a.vim: :A切换到相应的C文件或H文件，:AV, :AS分割窗口并打开文件
+Plugin 'vim-scripts/a.vim'
+
+" FuzzyFinder: 文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
+"Plugin 'FuzzyFinder'
 
 " python-imports: This VIM plugin automates the insertion of import statements at the top of a file.
 Plugin 'python-imports.vim'
 
-" CaptureClipboard: Append system clipboard changes to current buffer
-Plugin 'CaptureClipboard'
-
-" ctrlp: Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
-Plugin 'ctrlp.vim'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif     " MacOSX/Linux
+" kien/ctrlp.vim: Fuzzy file, buffer, mru, tag, etc finder.
+" 使用<C-p>调用CtrlP, 帮助条目:trlp-commands, trlp-extensions, ctrlp-mappings
+" 只能在当前工作目录下查找吗???
+Plugin 'kien/ctrlp.vim'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a     " MacOSX/Linux
 "wset wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.pyc,*.png,*.jpg,*.gif  " Windows
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = '\v\.(exe|so|dll)$'
 let g:ctrlp_extensions = ['funky']
-" :help ctrlp-commands and :help ctrlp-extensions for help
 
 " ctrlp-modified.vim: Easily open locally modified files in your git-versioned projects 
 Plugin 'ctrlp-modified.vim'
-" map <Leader>m :CtrlPModified<CR>
-
-" ctrlp-funky: A super simple function navigator for ctrlp.vim
-Plugin 'tacahiroy/ctrlp-funky'
-nnoremap <Leader>fu :CtrlPFunky<Cr>
-" narrow the list down with a word under cursor
-nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+map <Leader>m :CtrlPModified<CR>            " shows all files which have been modified since your last commit
+map <Leader>M :CtrlPBranch<CR>              " shows all files modified on your current branch
 
 " displays tags in a window, ordered by scope
 Plugin 'majutsushi/tagbar'
@@ -323,7 +320,7 @@ let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 Plugin 'scrooloose/nerdtree'
 let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$']  " 忽略.pyc .o .ko 结尾的文件
 " 列出当前目录文件
-map <F3> :NERDTreeToggle<CR>            
+map <F4> :NERDTreeToggle<CR>            
 autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
@@ -346,3 +343,4 @@ filetype plugin indent on    " required
 
 
 " 常用的帮助命令: g; 
+" vimdiff, svndiff
