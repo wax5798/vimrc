@@ -33,11 +33,14 @@ set hlsearch                " 搜索时高亮显示被找到的文本
 "set foldcolumn=0           " 设置折叠区域的宽度
 "setlocal foldlevel=100     " 设置折叠层数为
 "set foldclose=all          " 设置为自动关闭折叠
-"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>    " 用空格键来开关折叠
+" 用空格键来开关折叠
+"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 "++++++++++++++++++++++++++++++配色与主题+++++++++++++++++++++++++++++++++++++
 syntax on
-color ron                   " 设置背景主题  
+colorscheme molokai
+highlight NonText guibg=#060606
+highlight Folded  guibg=#0A0A0A guifg=#9090D0
 
 
 "++++++++++++++++++++++++++++++命令行与状态行+++++++++++++++++++++++++++++++++
@@ -164,14 +167,23 @@ map <C-A> <Esc>ggVG$
 map! <C-v> <C-r>+
 vmap <C-c> "+y
 "比较文件  
-nnoremap <F2> :vert diffsplit 
+nnoremap <F2> :vert diffsplit
 nnoremap <C-]> g<C-]>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
+
+" 用于切换buffer
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
+
+" 用于quickfix条目的切换
+nnoremap <silent> [c :cprevious<CR>
+nnoremap <silent> ]c :cnext<CR>
+nnoremap <silent> [C :cfirst<CR>
+nnoremap <silent> ]C :clast<CR>
+
 cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%'
 nnoremap k gk
 nnoremap gk k
@@ -282,6 +294,11 @@ let g:EasyMotion_leader_key='<Space>'
 " vim-scripts/a.vim: :A切换到相应的C文件或H文件，:AV, :AS分割窗口并打开文件
 Plugin 'vim-scripts/a.vim'
 
+" vim-scripts/grep.vim: Grep search tools integration with Vim
+Plugin 'vim-scripts/grep.vim'
+" 常用命令:Grep, GrepArgs
+nnoremap <silent> <F3> :Rgrep<CR>
+
 " FuzzyFinder: 文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
 "Plugin 'FuzzyFinder'
 
@@ -300,30 +317,48 @@ let g:ctrlp_extensions = ['funky']
 
 " ctrlp-modified.vim: Easily open locally modified files in your git-versioned projects 
 Plugin 'ctrlp-modified.vim'
-map <Leader>m :CtrlPModified<CR>            " shows all files which have been modified since your last commit
-map <Leader>M :CtrlPBranch<CR>              " shows all files modified on your current branch
+" shows all files which have been modified since your last commit
+map <Leader>m :CtrlPModified<CR>
+" shows all files modified on your current branch
+map <Leader>M :CtrlPBranch<CR>
 
-" displays tags in a window, ordered by scope
-Plugin 'majutsushi/tagbar'
-let g:tagbar_width=35
-let g:tagbar_autofocus=1
-nmap <F6> :TagbarToggle<CR>
+" displays tags in a window, ordered by scope???conflict with nerdtree and winmanager
+"Plugin 'majutsushi/tagbar'
+"let g:tagbar_width=35
+"let g:tagbar_autofocus=1
+"nmap <F6> :TagbarToggle<CR>
+
+" taglist.vim: 使用:Tlist打开
+Plugin 'taglist.vim'
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
 
 " Syntax checking hacks for vim
 Plugin 'scrooloose/syntastic'
 let g:syntastic_python_checkers=['pylint']
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 
+" netrw.vim: 为自带插件
+" - 返回上级目录; c 切换vim 当前工作目录正在浏览的目录
+" d 创建目录; D 删除目录或文件
+" i 切换显示方式; R 文件或目录重命名
+" s 选择排序方式; x 定制浏览方式, 使用你指定的程序打开该文件
+
+" Winmanager: 窗口管理工具
+Plugin 'Winmanager'
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap wm :WMToggle<cr>
+
 "Plugin 'The-NERD-Commenter'
 
-" nerdtree: A tree explorer plugin for vim
-Plugin 'scrooloose/nerdtree'
-let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$']  " 忽略.pyc .o .ko 结尾的文件
+" nerdtree: A tree explorer plugin for vim???conflict with tagbar and winmanager
+"Plugin 'scrooloose/nerdtree'
+"let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$']  " 忽略.pyc .o .ko 结尾的文件
 " 列出当前目录文件
-map <F4> :NERDTreeToggle<CR>            
-autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
+"map <F4> :NERDTreeToggle<CR>            
+"autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
 " 只剩 NERDTree时自动关闭
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
 " All of your Plugins must be added before the following line
