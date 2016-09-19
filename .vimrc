@@ -11,7 +11,7 @@ filetype plugin on          " 载入文件类型插件
 set mouse=a                 " 可以使用鼠标
 set mousemodel=popup        " 右键单击窗口时弹出快捷菜单???好像没什么用
 set cursorline              " 高亮光标所在行
-set cursorcolumn            " 高亮光标所在列
+"set cursorcolumn            " 高亮光标所在列
 
 "++++++++++++++++++++++++++++++空白与缩进+++++++++++++++++++++++++++++++++++++
 set sw=4	 	    		" 缩进代码时，缩进量为4
@@ -38,10 +38,10 @@ set hlsearch                " 搜索时高亮显示被找到的文本
 
 "++++++++++++++++++++++++++++++配色与主题+++++++++++++++++++++++++++++++++++++
 syntax on
-colorscheme molokai
-highlight NonText guibg=#060606
-highlight Folded  guibg=#0A0A0A guifg=#9090D0
-
+colorscheme desert
+"colorscheme molokai
+"highlight NonText guibg=#060606
+"highlight Folded  guibg=#0A0A0A guifg=#9090D0
 
 "++++++++++++++++++++++++++++++命令行与状态行+++++++++++++++++++++++++++++++++
 set wildmode=longest,list	" 在命令行模式下tab采用shell的补全方式
@@ -168,7 +168,9 @@ map! <C-v> <C-r>+
 vmap <C-c> "+y
 "比较文件  
 nnoremap <F2> :vert diffsplit
+
 nnoremap <C-]> g<C-]>
+nnoremap <C-LeftMouse> g<C-]>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
@@ -192,13 +194,15 @@ nnoremap gj j
 noremap <Leader>n nzz
 noremap <Leader>N Nzz
 
+noremap <Leader>p :set paste!<CR>
+
 
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 
-nnoremap <F5> :!ctags -R<CR>
+nnoremap <F5> :!ctags -R<CR><CR>
 " C，C++ 按F8编译运行
 map <F8> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
@@ -276,9 +280,9 @@ Plugin 'tpope/vim-fugitive'
 set statusline+=%{fugitive#statusline()}    " show Git hotness
 
 " indentLine: 缩进对齐线
-Plugin 'Yggdroot/indentLine'
-let g:indentLine_char = '┊'                 " this feature only works with files whose encoding is UTF-8
-let g:indentLine_color_term = 239           " change charactor color
+"Plugin 'Yggdroot/indentLine'
+"let g:indentLine_char = '┊'                 " this feature only works with files whose encoding is UTF-8
+"let g:indentLine_color_term = 239           " change charactor color
 
 " L9: vim-scripts repos
 Plugin 'L9'                                 " usage: see source code???还是不知道干什么用的。。。
