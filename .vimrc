@@ -74,7 +74,7 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o "取�
 "++++++++++++++++++++++++++++++其他+++++++++++++++++++++++++++++++++++++++++++
 set number                  " 显示行号
 set scrolloff=3             " 光标移动到buffer的顶部和底部时保持3行距离
-set scroll=14             " 可以使用ctrl-d, ctrl-u来让屏幕上下滚动scroll指定行数
+set scroll=20               " 可以使用ctrl-d, ctrl-u来让屏幕上下滚动scroll指定行数
 set textwidth=0             " 禁止自动换行
 set hidden                  " 允许在有未保存的修改时切换缓冲区
 set report=0                " 通过使用: commands命令，告诉我们文件的哪一行被改变过
@@ -92,6 +92,10 @@ if has("autocmd")
           \ endif
 endif
 set tags=./tags,tags,../tags
+
+" 使用quickfix显示cscope的结果
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+cs add ./cscope.out ./
 
 "##############################################################################
 "
@@ -169,7 +173,24 @@ vmap <C-c> "+y
 "比较文件  
 nnoremap <F2> :vert diffsplit
 
+" 查找C代码符号
+nmap <Leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+" 查找本定义
+nmap <Leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+" 查找调用本函数的函数
+nmap <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+" 查找本字符串
+nmap <Leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+" 查找本egrep模式
+nmap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+" 查找本文件
+nmap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
+" 查找包含本文件的文件
+nmap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
+" 查找本函数调用的函数
+nmap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nnoremap <C-]> g<C-]>
+nnoremap <C-n> <C-d>
 nnoremap <C-LeftMouse> g<C-]>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
