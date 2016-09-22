@@ -28,13 +28,13 @@ set incsearch               " 输入搜索内容时就显示搜索结果
 set hlsearch                " 搜索时高亮显示被找到的文本
 
 "++++++++++++++++++++++++++++++语法折叠+++++++++++++++++++++++++++++++++++++++
-"set foldenable             " 开启折叠
-"set foldmethod=syntax      " 设置语法折叠
-"set foldcolumn=0           " 设置折叠区域的宽度
-"setlocal foldlevel=100     " 设置折叠层数为
-"set foldclose=all          " 设置为自动关闭折叠
+set foldenable              " 开启折叠
+set foldmethod=syntax       " 设置语法折叠
+set foldcolumn=0            " 设置折叠区域的宽度
+set foldlevel=100           " 设置折叠层数为
+"set foldclose=all           " 设置为自动关闭折叠
 " 用空格键来开关折叠
-"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+nnoremap <tab> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 "++++++++++++++++++++++++++++++配色与主题+++++++++++++++++++++++++++++++++++++
 syntax on
@@ -73,7 +73,7 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o "取�
 
 "++++++++++++++++++++++++++++++其他+++++++++++++++++++++++++++++++++++++++++++
 set number                  " 显示行号
-set scrolloff=3             " 光标移动到buffer的顶部和底部时保持3行距离
+"set scrolloff=3             " 光标移动到buffer的顶部和底部时保持3行距离
 set scroll=20               " 可以使用ctrl-d, ctrl-u来让屏幕上下滚动scroll指定行数
 set textwidth=0             " 禁止自动换行
 set hidden                  " 允许在有未保存的修改时切换缓冲区
@@ -362,6 +362,13 @@ let Tlist_Exit_OnlyWindow=1
 Plugin 'scrooloose/syntastic'
 let g:syntastic_python_checkers=['pylint']
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
+
+" scrooloose/nerdcommenter: Vim plugin for intensely orgasmic commenting
+"Plugin 'scrooloose/nerdcommenter'
+
+" vim-airline/vim-airline: lean & mean status/tabline for vim that's light as air
+"Plugin 'vim-airline/vim-airline'
+"Plugin 'vim-airline/vim-airline-themes'
 
 " netrw.vim: 为自带插件
 " - 返回上级目录; c 切换vim 当前工作目录正在浏览的目录
