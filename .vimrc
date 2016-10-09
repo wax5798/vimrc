@@ -21,6 +21,9 @@ set smarttab                " 在行首输入tab时插入宽度为sw的空白，
 set smartindent             " 开启新行时使用智能自动缩进
 set softtabstop=4           " 统一缩进为4
 set backspace=2             " 使回格键（backspace）正常处理indent, eol, start等          
+let g:html_indent_inctags = "html,body,head,tbody"
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
 
 "++++++++++++++++++++++++++++++搜索设置+++++++++++++++++++++++++++++++++++++++
 set ignorecase smartcase	" 搜索时智能忽略大小写
