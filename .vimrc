@@ -64,6 +64,8 @@ filetype indent on          " 为特定文件类型载入相关缩进文件
 au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
 au BufRead,BufNewFile *.{go}   set filetype=go
 au BufRead,BufNewFile *.{js}   set filetype=javascript
+au FileType python set noet
+au FileType python set nosmarttab
 au FileType php setlocal dict+=~/.vim/dict/php_funclist.dict
 au FileType css setlocal dict+=~/.vim/dict/css.dict
 au FileType c setlocal dict+=~/.vim/dict/c.dict
@@ -94,7 +96,8 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
-set tags=./tags,tags,../tags
+"set tags=./tags,tags,../tags
+set tags=tags
 
 " 使用quickfix显示cscope的结果
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -127,7 +130,7 @@ func SetTitle()
 	else 
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: ") 
+		call append(line(".")+1, "	> Author: wan xiangjun") 
 		call append(line(".")+2, "	> Mail: ") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
 		call append(line(".")+4, " ************************************************************************/") 
@@ -304,9 +307,10 @@ Plugin 'tpope/vim-fugitive'
 set statusline+=%{fugitive#statusline()}    " show Git hotness
 
 " indentLine: 缩进对齐线
-"Plugin 'Yggdroot/indentLine'
-"let g:indentLine_char = '┊'                 " this feature only works with files whose encoding is UTF-8
-"let g:indentLine_color_term = 239           " change charactor color
+Plugin 'Yggdroot/indentLine'
+set t_Co=256
+let g:indentLine_char='┊'                 " this feature only works with files whose encoding is UTF-8
+"let g:indentLine_color_term=108           " change charactor color
 
 " L9: vim-scripts repos
 Plugin 'L9'                                 " usage: see source code???还是不知道干什么用的。。。
