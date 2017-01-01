@@ -222,8 +222,6 @@ nnoremap gj j
 noremap <Leader>n nzz
 noremap <Leader>N Nzz
 
-noremap <Leader>p :set paste!<CR>
-
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 "noremap <Up> <Nop>
@@ -305,6 +303,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " 非常强大的自动补全工具
 Plugin 'Valloric/YouCompleteMe'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 
 " vim-fugitive: Git wrapper 常用命令:Gdiff, help fugitive.txt获取帮助
 Plugin 'tpope/vim-fugitive'                 
@@ -334,13 +333,24 @@ let g:EasyMotion_leader_key='<Space>'
 " Plugin 'python-imports.vim'
 
 " kien/ctrlp.vim: Fuzzy file, buffer, mru, tag, etc finder.
-" 使用<C-p>调用CtrlP, 帮助条目:trlp-commands, trlp-extensions, ctrlp-mappings
-" 只能在当前工作目录下查找吗???
+" 使用<C-p>调用CtrlP, 帮助条目:ctrlp-commands, ctrlp-extensions, ctrlp-mappings, ctrlp-options
+" Once CtrlP is open:
+"    Press <F5> to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
+"    Press <c-f> and <c-b> to cycle between modes.
+"    Press <c-d> to switch to filename only search instead of full path.
+"    Press <c-r> to switch to regexp mode.
+"    Use <c-j>, <c-k> or the arrow keys to navigate the result list.
+"    Use <c-t> or <c-v>, <c-x> to open the selected entry in a new tab or in a new split.
+"    Use <c-n>, <c-p> to select the next/previous string in the prompt's history.
+"    Use <c-y> to create a new file and its parent directories.
+"    Use <c-z> to mark/unmark multiple files and <c-o> to open them.
+
 Plugin 'kien/ctrlp.vim'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe    
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = '\v\.(exe|so|dll)$'
-let g:ctrlp_extensions = ['funky']
+let g:ctrlp_working_path_mode = 'c'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe,*.dll,*.git,*.svn
+nmap <Leader>pb :CtrlPBuffer<CR>
+nmap <Leader>pp :CtrlP<CR>
+nmap <Leader>pm :CtrlPMRU<CR>
 
 " ctrlp-modified.vim: Easily open locally modified files in your git-versioned projects 
 " Plugin 'ctrlp-modified.vim'
