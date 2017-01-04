@@ -34,7 +34,7 @@ set hlsearch                " 搜索时高亮显示被找到的文本
 set foldenable              " 开启折叠
 set foldmethod=indent       " 设置语法折叠
 set foldcolumn=0            " 设置折叠区域的宽度
-set foldlevel=100           " 设置折叠层数为
+set foldlevel=0           " 设置折叠层数为
 "set foldclose=all           " 设置为自动关闭折叠
 " 用tab键来开关折叠
 " nnoremap <tab> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
@@ -219,8 +219,6 @@ nnoremap k gk
 nnoremap gk k
 nnoremap j gj
 nnoremap gj j
-noremap <Leader>n nzz
-noremap <Leader>N Nzz
 
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
@@ -302,8 +300,8 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " 非常强大的自动补全工具
-Plugin 'Valloric/YouCompleteMe'
-let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+"Plugin 'Valloric/YouCompleteMe'
+"let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 
 " vim-fugitive: Git wrapper 常用命令:Gdiff, help fugitive.txt获取帮助
 Plugin 'tpope/vim-fugitive'                 
@@ -376,7 +374,9 @@ let g:syntastic_python_checkers=['pylint']
 let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 
 " scrooloose/nerdcommenter: Vim plugin for intensely orgasmic commenting
-" Plugin 'scrooloose/nerdcommenter'
+" :help nerdcommenter for help
+" usage:[count]<leader>c<space> |NERDComToggleComment|
+Plugin 'scrooloose/nerdcommenter'
 
 " vim-airline/vim-airline: lean & mean status/tabline for vim that's light as air
 " Plugin 'vim-airline/vim-airline'
