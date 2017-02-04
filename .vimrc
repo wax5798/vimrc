@@ -34,7 +34,7 @@ set hlsearch                " 搜索时高亮显示被找到的文本
 set foldenable              " 开启折叠
 set foldmethod=indent       " 设置语法折叠
 set foldcolumn=0            " 设置折叠区域的宽度
-set foldlevel=0           " 设置折叠层数为
+set foldlevel=100           " 设置折叠层数为
 "set foldclose=all           " 设置为自动关闭折叠
 " 用tab键来开关折叠
 " nnoremap <tab> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
@@ -84,7 +84,7 @@ set textwidth=0             " 禁止自动换行
 set hidden                  " 允许在有未保存的修改时切换缓冲区
 set report=0                " 通过使用: commands命令，告诉我们文件的哪一行被改变过
 set history=1000            " 历史记录数
-set iskeyword+=.,_,$,@,%,#,-  " 带有如下符号的单词不要被换行分割
+"set iskeyword+=.,_,$,@,%,#,-  " 带有如下符号的单词不要被换行分割
 set viminfo+=!              " 保存全局变量
 set selection=inclusive     " 选择包含最后一个字符
 "set clipboard+=unnamed      " 共享剪贴板  
@@ -97,7 +97,7 @@ if has("autocmd")
           \ endif
 endif
 "set tags=./tags,tags,../tags
-set tags=tags,/usr/include/tags
+set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
 
 " 使用quickfix显示cscope的结果
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -176,6 +176,10 @@ map <C-A> <Esc>ggVG$
 "map <C-v> "+p
 map! <C-v> <C-r>+
 vmap <C-c> "+y
+
+" ctrl + s 保存文件
+map <C-a> :w<CR>
+
 "比较文件  
 nnoremap <F2> :vert diffsplit
 
@@ -195,12 +199,20 @@ nmap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 nmap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
 " 查找本函数调用的函数
 nmap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+" gd 在函数内部跳转（局部变量）
 nnoremap <C-]> g<C-]>
+" nnoremap <C-LeftMouse> g<C-]>
 nnoremap <C-n> <C-d>
-nnoremap <C-LeftMouse> g<C-]>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 inoremap <C-g> <Esc>gUawea
+"inoremap <C-h> <Left>
+"inoremap <C-j> <Down>
+"inoremap <C-k> <Up>
+"inoremap <C-l> <Right>
+inoremap <C-p> <C-o>p
+inoremap <C-u> <C-u>
+
 
 " 用于切换buffer
 nnoremap <silent> [b :bprevious<CR>
@@ -300,8 +312,10 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " 非常强大的自动补全工具
-"Plugin 'Valloric/YouCompleteMe'
-"let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+Plugin 'Valloric/YouCompleteMe'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_show_diagnostics_ui = 0
 
 " vim-fugitive: Git wrapper 常用命令:Gdiff, help fugitive.txt获取帮助
 Plugin 'tpope/vim-fugitive'                 
@@ -344,7 +358,8 @@ let g:EasyMotion_leader_key='<Space>'
 "    Use <c-z> to mark/unmark multiple files and <c-o> to open them.
 
 Plugin 'kien/ctrlp.vim'
-let g:ctrlp_working_path_mode = 'c'
+let g:ctrlp_working_path_mode = 'w'
+let g:ctrlp_by_filename = 1
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe,*.dll,*.git,*.svn
 nmap <Leader>pb :CtrlPBuffer<CR>
 nmap <Leader>pp :CtrlP<CR>
@@ -369,9 +384,9 @@ nmap <F6> :TagbarToggle<CR>
 " let Tlist_Exit_OnlyWindow=1
 
 " Syntax checking hacks for vim
-Plugin 'scrooloose/syntastic'
-let g:syntastic_python_checkers=['pylint']
-let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
+"Plugin 'scrooloose/syntastic'
+"let g:syntastic_python_checkers=['pylint']
+"let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 
 " scrooloose/nerdcommenter: Vim plugin for intensely orgasmic commenting
 " :help nerdcommenter for help
