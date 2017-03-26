@@ -165,6 +165,7 @@ autocmd BufNewFile * normal G
 "
 "##############################################################################
 let mapleader=","
+let maplocalleader="\\"
 noremap \ ,
 
 " shift tab pages
@@ -192,7 +193,7 @@ nmap <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
 " 查找本字符串
 nmap <Leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
 " 查找本egrep模式
-nmap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+" nmap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 " 查找本文件
 nmap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 " 查找包含本文件的文件
@@ -312,10 +313,10 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " 非常强大的自动补全工具
-Plugin 'Valloric/YouCompleteMe'
-let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_show_diagnostics_ui = 0
+"Plugin 'Valloric/YouCompleteMe'
+"let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+"let g:ycm_confirm_extra_conf = 0
+"let g:ycm_show_diagnostics_ui = 0
 
 " vim-fugitive: Git wrapper 常用命令:Gdiff, help fugitive.txt获取帮助
 Plugin 'tpope/vim-fugitive'                 
@@ -360,7 +361,7 @@ let g:EasyMotion_leader_key='<Space>'
 Plugin 'kien/ctrlp.vim'
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_by_filename = 1
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe,*.dll,*.git,*.svn
+set wildignore+=*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe,*.dll,*.git,*.svn
 nmap <Leader>pb :CtrlPBuffer<CR>
 nmap <Leader>pp :CtrlP<CR>
 nmap <Leader>pm :CtrlPMRU<CR>
@@ -388,22 +389,46 @@ nmap <F6> :TagbarToggle<CR>
 "let g:syntastic_python_checkers=['pylint']
 "let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 
-" scrooloose/nerdcommenter: Vim plugin for intensely orgasmic commenting
-" :help nerdcommenter for help
+" scrooloose/nerdcommenter START
+" Vim plugin for intensely orgasmic commenting
 " usage:[count]<leader>c<space> |NERDComToggleComment|
 Plugin 'scrooloose/nerdcommenter'
+let g:NERDSpaceDelims = 1       " Add spaces after comment delimiters by default
+let g:NERDCompactSexyComs = 1   " Use compact syntax for prettified multi-line comments
+let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDAltDelims_java = 1    " Set a language to use its alternate delimiters by default
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }   " Add your own custom formats or override the defaults
+let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDTrimTrailingWhitespace = 1    " Enable trimming of trailing whitespace when uncommenting
+" scrooloose/nerdcommenter END
 
-" vim-airline/vim-airline: lean & mean status/tabline for vim that's light as air
-" Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
+" vim-airline/vim-airline START
+" lean & mean status/tabline for vim that's light as air
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+let g:airline_theme='molokai'                           " 配置主题：https://github.com/vim-airline/vim-airline/wiki/Screenshots
+let g:airline#extensions#tabline#enabled = 1            " Smarter tab line
+let g:airline#extensions#tabline#buffer_nr_show = 1     " 显示buffer的序号
+let g:airline_powerline_fonts = 1                       " 以下配置分隔符，需要安装powerline字体
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'                           
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+let g:airline_symbols.linenr = '⭡'
+" vim-airline END
 
 " netrw.vim: 为自带插件
 " - 返回上级目录; c 切换vim 当前工作目录正在浏览的目录
 " d 创建目录; D 删除目录或文件
 " i 切换显示方式; R 文件或目录重命名
 " s 选择排序方式; x 定制浏览方式, 使用你指定的程序打开该文件
-
-"Plugin 'The-NERD-Commenter'
 
 " nerdtree: A tree explorer plugin for vim???conflict with tagbar and winmanager
 "Plugin 'scrooloose/nerdtree'
