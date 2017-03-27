@@ -79,7 +79,7 @@ au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o "取�
 "++++++++++++++++++++++++++++++其他+++++++++++++++++++++++++++++++++++++++++++
 set number                  " 显示行号
 "set scrolloff=3             " 光标移动到buffer的顶部和底部时保持3行距离
-set scroll=15               " 可以使用ctrl-d, ctrl-u来让屏幕上下滚动scroll指定行数
+set scroll=12               " 可以使用ctrl-d, ctrl-u来让屏幕上下滚动scroll指定行数
 set textwidth=0             " 禁止自动换行
 set hidden                  " 允许在有未保存的修改时切换缓冲区
 set report=0                " 通过使用: commands命令，告诉我们文件的哪一行被改变过
@@ -129,7 +129,7 @@ func SetTitle()
 "        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
 	else 
 		call setline(1, "/*************************************************************************") 
-		call append(line("."), "	> File Name: ".expand("%")) 
+		call append(line("."), "	> File Name: ".expand("%:t")) 
 		call append(line(".")+1, "	> Author: wan xiangjun") 
 		call append(line(".")+2, "	> Mail: ") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
@@ -146,8 +146,8 @@ func SetTitle()
 		call append(line(".")+7, "")
 	endif
 	if expand("%:e") == 'h'
-		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
-		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+		call append(line(".")+6, "#ifndef _".toupper(expand("%:t:r"))."_H")
+		call append(line(".")+7, "#define _".toupper(expand("%:t:r"))."_H")
 		call append(line(".")+8, "#endif")
 	endif
 	if &filetype == 'java'
@@ -175,11 +175,11 @@ map! <C-Z> <Esc>zzi
 map <C-A> <Esc>ggVG$
 " 选中状态下 Ctrl+c 复制
 "map <C-v> "+p
-map! <C-v> <C-r>+
+"map! <C-v> <C-r>+
 vmap <C-c> "+y
 
 " ctrl + s 保存文件
-map <C-a> :w<CR>
+map <C-a> :wa<CR>
 
 "比较文件  
 nnoremap <F2> :vert diffsplit
@@ -200,9 +200,13 @@ nmap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 nmap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
 " 查找本函数调用的函数
 nmap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+nmap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*return:<CR>**/<Esc>
+
 " gd 在函数内部跳转（局部变量）
 nnoremap <C-]> g<C-]>
-" nnoremap <C-LeftMouse> g<C-]>
+nnoremap <C-LeftMouse> <LeftMouse>g<C-]>
+nnoremap <C-RightMouse> <C-o>
 nnoremap <C-n> <C-d>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
@@ -210,9 +214,8 @@ inoremap <C-g> <Esc>gUawea
 "inoremap <C-h> <Left>
 "inoremap <C-j> <Down>
 "inoremap <C-k> <Up>
-"inoremap <C-l> <Right>
-inoremap <C-p> <C-o>p
-inoremap <C-u> <C-u>
+inoremap <C-l> <Right>
+inoremap <C-A> <Esc>A
 
 
 " 用于切换buffer
@@ -232,6 +235,8 @@ nnoremap k gk
 nnoremap gk k
 nnoremap j gj
 nnoremap gj j
+nnoremap <C-j> gjzz
+nnoremap <C-k> gkzz
 
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
@@ -240,9 +245,10 @@ nnoremap <silent> <F3> :NERDTreeToggle<CR>
 "noremap <Left> <Nop>
 "noremap <Right> <Nop>
 
-nmap wm :WMToggle<cr>
+"nmap wm :WMToggle<cr>
 
-nnoremap <F5> :!ctags -R<CR><CR>
+nnoremap <F4> :Rgrep<CR><CR><CR>.[h,c]<CR><CR>
+nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 " C，C++ 按F8编译运行
 map <F8> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
@@ -389,7 +395,7 @@ nmap <F6> :TagbarToggle<CR>
 "let g:syntastic_python_checkers=['pylint']
 "let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
 
-" scrooloose/nerdcommenter START
+" scrooloose/nerdcommenter BEGIN
 " Vim plugin for intensely orgasmic commenting
 " usage:[count]<leader>c<space> |NERDComToggleComment|
 Plugin 'scrooloose/nerdcommenter'
@@ -402,7 +408,7 @@ let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (us
 let g:NERDTrimTrailingWhitespace = 1    " Enable trimming of trailing whitespace when uncommenting
 " scrooloose/nerdcommenter END
 
-" vim-airline/vim-airline START
+" vim-airline/vim-airline BEGIN
 " lean & mean status/tabline for vim that's light as air
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -435,7 +441,7 @@ let g:airline_symbols.linenr = '⭡'
 let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$']  " 忽略.pyc .o .ko 结尾的文件
 " 列出当前目录文件
 "map <F4> :NERDTreeToggle<CR>            
-autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
+"autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
