@@ -96,8 +96,8 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
-"set tags=./tags,tags,../tags
-set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+" set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+set tags=tags,/usr/include/tags
 
 " 使用quickfix显示cscope的结果
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -168,40 +168,35 @@ let mapleader=","
 let maplocalleader="\\"
 noremap \ ,
 
-" shift tab pages
-"map <S-Left> :tabp<CR>
-"map <S-Right> :tabn<CR>
-map! <C-Z> <Esc>zzi
-map <C-A> <Esc>ggVG$
-" 选中状态下 Ctrl+c 复制
-"map <C-v> "+p
-"map! <C-v> <C-r>+
 vmap <C-c> "+y
 
-" ctrl + s 保存文件
-map <C-a> :wa<CR>
+inoremap <C-g> <Esc>gUawea
+inoremap <C-l> <Right>
+inoremap <C-A> <Esc>A
 
-"比较文件  
-nnoremap <F2> :vert diffsplit
+" cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' // TODO 什么用
 
 " 查找C代码符号
-nmap <Leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 " 查找本定义
-nmap <Leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 " 查找调用本函数的函数
-nmap <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
 " 查找本字符串
-nmap <Leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
 " 查找本egrep模式
-" nmap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+" nnoremap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 " 查找本文件
-nmap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
 " 查找包含本文件的文件
-nmap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
 " 查找本函数调用的函数
-nmap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
-nmap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*return:<CR>**/<Esc>
+nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*return:<CR>**/<Esc>
+
+nnoremap <C-a> :wa<CR>
+" nnoremap <F2> :vert diffsplit  " TODO 什么用？
 
 " gd 在函数内部跳转（局部变量）
 nnoremap <C-]> g<C-]>
@@ -210,13 +205,6 @@ nnoremap <C-RightMouse> <C-o>
 nnoremap <C-n> <C-d>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
-inoremap <C-g> <Esc>gUawea
-"inoremap <C-h> <Left>
-"inoremap <C-j> <Down>
-"inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-inoremap <C-A> <Esc>A
-
 
 " 用于切换buffer
 nnoremap <silent> [b :bprevious<CR>
@@ -230,7 +218,6 @@ nnoremap <silent> ]c :cnext<CR>
 nnoremap <silent> [C :cfirst<CR>
 nnoremap <silent> ]C :clast<CR>
 
-cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%'
 nnoremap k gk
 nnoremap gk k
 nnoremap j gj
@@ -238,19 +225,13 @@ nnoremap gj j
 nnoremap <C-j> gjzz
 nnoremap <C-k> gkzz
 
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
-
-"noremap <Up> <Nop>
-"noremap <Down> <Nop>
-"noremap <Left> <Nop>
-"noremap <Right> <Nop>
-
 "nmap wm :WMToggle<cr>
 
 nnoremap <F4> :Rgrep<CR><CR><CR>.[h,c]<CR><CR>
 nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
+
 " C，C++ 按F8编译运行
-map <F8> :call CompileRunGcc()<CR>
+nnoremap <F8> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
@@ -278,7 +259,7 @@ func! CompileRunGcc()
 endfunc
 
 " C,C++的调试
-map <F9> :call Rungdb()<CR>
+nnoremap <F9> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
 	exec "!g++ % -g -o %<"
@@ -318,40 +299,52 @@ Plugin 'VundleVim/Vundle.vim'
 " different version somewhere else.
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
-" 非常强大的自动补全工具
-"Plugin 'Valloric/YouCompleteMe'
-"let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-"let g:ycm_confirm_extra_conf = 0
-"let g:ycm_show_diagnostics_ui = 0
+" Valloric/YouCompleteMe BEGIN
+Plugin 'Valloric/YouCompleteMe'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_show_diagnostics_ui = 0
+" Valloric/YouCompleteMe END
 
-" vim-fugitive: Git wrapper 常用命令:Gdiff, help fugitive.txt获取帮助
+" tpope/vim-fugitive BEGIN
+" TODO 学习完git之后再来看这个插件的用途
 Plugin 'tpope/vim-fugitive'                 
 set statusline+=%{fugitive#statusline()}    " show Git hotness
+" tpope/vim-fugitive END
 
-" indentLine: 缩进对齐线
+" Yggdroot/indentLine BEGIN
 Plugin 'Yggdroot/indentLine'
 set t_Co=256
 let g:indentLine_char='┊'                 " this feature only works with files whose encoding is UTF-8
-"let g:indentLine_color_term=108           " change charactor color
+" Yggdroot/indentLine END
 
-" L9: vim-scripts repos
-Plugin 'L9'                                 " usage: see source code???还是不知道干什么用的。。。
+" L9 BEGIN
+" TODO 这个库有什么用途
+Plugin 'L9'          
+" L9 END
 
-" Auto-Pairs: 插入或删除括号和双引号时自动配对
+" Auto-Pairs BEGIN
+" 和.操作有冲突，暂时屏蔽
 " Plugin 'Auto-Pairs'
+" Auto-Pairs END
 
-" EasyMotion: 一个快速跳转工具
-" 使用空格 + {w,f,F,b,e}
+" EasyMotion BEGIN
+" 使用空格 + {w,f,F,b,e ...}
 Plugin 'EasyMotion'
 let g:EasyMotion_leader_key='<Space>'
+" EasyMotion END
 
-" FuzzyFinder: 文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
+" FuzzyFinder BEGIN
+" TODO  文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
 "Plugin 'FuzzyFinder'
+" FuzzyFinder END
 
-" python-imports: This VIM plugin automates the insertion of import statements at the top of a file.
+" python-imports.vim BEGIN
+" TODO 暂时不用python
 " Plugin 'python-imports.vim'
+" python-imports.vim END
 
-" kien/ctrlp.vim: Fuzzy file, buffer, mru, tag, etc finder.
+" kien/ctrlp.vim BEGIN
 " 使用<C-p>调用CtrlP, 帮助条目:ctrlp-commands, ctrlp-extensions, ctrlp-mappings, ctrlp-options
 " Once CtrlP is open:
 "    Press <F5> to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
@@ -363,7 +356,6 @@ let g:EasyMotion_leader_key='<Space>'
 "    Use <c-n>, <c-p> to select the next/previous string in the prompt's history.
 "    Use <c-y> to create a new file and its parent directories.
 "    Use <c-z> to mark/unmark multiple files and <c-o> to open them.
-
 Plugin 'kien/ctrlp.vim'
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_by_filename = 1
@@ -371,29 +363,29 @@ set wildignore+=*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif,*.o,*.ko,*.a,*.exe,*.dl
 nmap <Leader>pb :CtrlPBuffer<CR>
 nmap <Leader>pp :CtrlP<CR>
 nmap <Leader>pm :CtrlPMRU<CR>
+" kien/ctrlp.vim END
 
-" ctrlp-modified.vim: Easily open locally modified files in your git-versioned projects 
-" Plugin 'ctrlp-modified.vim'
-" shows all files which have been modified since your last commit
-" map <Leader>m :CtrlPModified<CR>
-" shows all files modified on your current branch
-" map <Leader>M :CtrlPBranch<CR>
-
-" displays tags in a window, ordered by scope???conflict with nerdtree and winmanager
+" majutsushi/tagbar BEGIN
+" TODO conflict with nerdtree and winmanager ??
 Plugin 'majutsushi/tagbar'
 let g:tagbar_width=35
 let g:tagbar_autofocus=0
 nmap <F6> :TagbarToggle<CR>
+" majutsushi/tagbar END
 
-" taglist.vim: 使用:Tlist打开
+" taglist.vim BEGIN
+" 使用:Tlist打开
 " Plugin 'taglist.vim'
 " let Tlist_Show_One_File=1
 " let Tlist_Exit_OnlyWindow=1
+" taglist.vim END
 
-" Syntax checking hacks for vim
-"Plugin 'scrooloose/syntastic'
-"let g:syntastic_python_checkers=['pylint']
-"let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
+" scrooloose/syntastic BEGIN
+" TODO 有时间可以看一下
+" Plugin 'scrooloose/syntastic'
+" let g:syntastic_python_checkers=['pylint']
+" let g:syntastic_php_checkers=['php', 'phpcs', 'phpmd']
+" scrooloose/syntastic END
 
 " scrooloose/nerdcommenter BEGIN
 " Vim plugin for intensely orgasmic commenting
@@ -403,7 +395,7 @@ let g:NERDSpaceDelims = 1       " Add spaces after comment delimiters by default
 let g:NERDCompactSexyComs = 1   " Use compact syntax for prettified multi-line comments
 let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDAltDelims_java = 1    " Set a language to use its alternate delimiters by default
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }   " Add your own custom formats or override the defaults
+" let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }   " Add your own custom formats or override the defaults
 let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDTrimTrailingWhitespace = 1    " Enable trimming of trailing whitespace when uncommenting
 " scrooloose/nerdcommenter END
@@ -436,14 +428,17 @@ let g:airline_symbols.linenr = '⭡'
 " i 切换显示方式; R 文件或目录重命名
 " s 选择排序方式; x 定制浏览方式, 使用你指定的程序打开该文件
 
+" scrooloose/nerdtree BEGIN
+" TODO 因为直接从github上装的和tagbar冲突，所以直接用的NERD_tree.vim
 " nerdtree: A tree explorer plugin for vim???conflict with tagbar and winmanager
-"Plugin 'scrooloose/nerdtree'
+" Plugin 'scrooloose/nerdtree'
 let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$']  " 忽略.pyc .o .ko 结尾的文件
 " 列出当前目录文件
-"map <F4> :NERDTreeToggle<CR>            
-"autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
+nnoremap <silent> <F3> :NERDTreeToggle<CR>
+" autocmd vimenter * if !argc() | NERDTree | endif    "当打开vim且没有文件时自动打开NERDTree
 " 只剩 NERDTree时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" scrooloose/nerdtree END
 
 
 " All of your Plugins must be added before the following line
