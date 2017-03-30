@@ -110,23 +110,25 @@ cs add ./cscope.out ./
 "##############################################################################
 
 "新建.c,.h,.sh,.java文件，自动插入文件头 
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py,*.md exec ":call SetTitle()" 
 func SetTitle() 
-	if &filetype == 'sh' 
+	" if &filetype == 'sh' " 不能使用filetype的方式做判断，因为这时filetype还没有初始化
+	if expand("%:e") == 'sh'
 		call setline(1,"\#!/bin/bash") 
 		call append(line("."), "") 
-    elseif &filetype == 'python'
+    elseif expand("%:e") == 'py'
         call setline(1,"#!/usr/bin/env python")
         call append(line("."),"# coding=utf-8")
 	    call append(line(".")+1, "") 
-
-    elseif &filetype == 'ruby'
+    elseif expand("%:e") == 'rb'
         call setline(1,"#!/usr/bin/env ruby")
         call append(line("."),"# encoding: utf-8")
 	    call append(line(".")+1, "")
-
-"    elseif &filetype == 'mkd'
-"        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+    elseif expand("%:e") == 'md'
+        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+    elseif expand("%:e") == 'java'
+        call setline(1,"public class ".expand("%:r"))
+		call append(line("."),"")
 	else 
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%:t")) 
@@ -141,7 +143,7 @@ func SetTitle()
 		call append(line(".")+7, "using namespace std;")
 		call append(line(".")+8, "")
 	endif
-	if &filetype == 'c'
+	if expand("%:e") == 'c'
 		call append(line(".")+6, "#include<stdio.h>")
 		call append(line(".")+7, "")
 	endif
@@ -149,10 +151,6 @@ func SetTitle()
 		call append(line(".")+6, "#ifndef _".toupper(expand("%:t:r"))."_H")
 		call append(line(".")+7, "#define _".toupper(expand("%:t:r"))."_H")
 		call append(line(".")+8, "#endif")
-	endif
-	if &filetype == 'java'
-		call append(line(".")+6,"public class ".expand("%:r"))
-		call append(line(".")+7,"")
 	endif
 endfunc 
 "新建文件后，自动定位到文件末尾
@@ -165,7 +163,7 @@ autocmd BufNewFile * normal G
 "
 "##############################################################################
 let mapleader=","
-let maplocalleader="\\"
+let maplocalleader="`"
 noremap \ ,
 
 vmap <C-c> "+y
@@ -201,7 +199,8 @@ nnoremap <C-a> :wa<CR>
 " gd 在函数内部跳转（局部变量）
 nnoremap <C-]> g<C-]>
 nnoremap <C-LeftMouse> <LeftMouse>g<C-]>
-nnoremap <C-RightMouse> <C-o>
+" nnoremap <C-RightMouse> <C-o>
+nnoremap <C-RightMouse> <LeftMouse><C-t>
 nnoremap <C-n> <C-d>
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
@@ -335,7 +334,7 @@ let g:EasyMotion_leader_key='<Space>'
 " EasyMotion END
 
 " FuzzyFinder BEGIN
-" TODO  文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
+" TODO 文件查找, 功能很强大，具体有待研究???太久没人维护了，是否有其它替代插件
 "Plugin 'FuzzyFinder'
 " FuzzyFinder END
 
@@ -440,6 +439,10 @@ nnoremap <silent> <F3> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " scrooloose/nerdtree END
 
+" orgmode BEGIN
+Plugin 'vim-orgmode'
+"orgmode END
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -457,5 +460,8 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 
-" 常用的帮助命令: g; 
+" TODO
+" doc 目录下的帮助文件似乎没有效
 " vimdiff, svndiff
+
+
