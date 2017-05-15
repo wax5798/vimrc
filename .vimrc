@@ -32,7 +32,8 @@ set hlsearch                " 搜索时高亮显示被找到的文本
 
 "++++++++++++++++++++++++++++++语法折叠+++++++++++++++++++++++++++++++++++++++
 set foldenable              " 开启折叠
-set foldmethod=indent       " 设置语法折叠
+" set foldmethod=indent       " 设置缩进折叠
+set foldmethod=syntax       " 设置语法折叠
 set foldcolumn=0            " 设置折叠区域的宽度
 set foldlevel=100           " 设置折叠层数为
 "set foldclose=all           " 设置为自动关闭折叠
@@ -41,6 +42,7 @@ set foldlevel=100           " 设置折叠层数为
 
 "++++++++++++++++++++++++++++++配色与主题+++++++++++++++++++++++++++++++++++++
 syntax on
+" TODO 有时间找一个好看的主题
 colorscheme desert
 "colorscheme molokai
 "highlight NonText guibg=#060606
@@ -96,6 +98,7 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
+" 在/usr/include中使用sudo ctags -R --c-kinds=+px-d生成tag文件
 " set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
 set tags=tags,/usr/include/tags
 
@@ -139,12 +142,12 @@ func SetTitle()
 		call append(line(".")+5, "")
 	endif
 	if expand("%:e") == 'cpp'
-		call append(line(".")+6, "#include<iostream>")
+		call append(line(".")+6, "#include <iostream>")
 		call append(line(".")+7, "using namespace std;")
 		call append(line(".")+8, "")
 	endif
 	if expand("%:e") == 'c'
-		call append(line(".")+6, "#include<stdio.h>")
+		call append(line(".")+6, "#include <stdio.h>")
 		call append(line(".")+7, "")
 	endif
 	if expand("%:e") == 'h'
@@ -170,7 +173,8 @@ vmap <C-c> "+y
 
 inoremap <C-g> <Esc>gUawea
 inoremap <C-l> <Right>
-inoremap <C-A> <Esc>A
+inoremap <C-e> <Esc>A
+inoremap <C-a> <Esc>I
 
 " cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' // TODO 什么用
 
@@ -193,6 +197,8 @@ nnoremap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
 nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*return:<CR>**/<Esc>
 
+nnoremap <Leader>n oif (NULL == ) {<CR>}<Esc>kf)i
+
 nnoremap <C-a> :wa<CR>
 " nnoremap <F2> :vert diffsplit  " TODO 什么用？
 
@@ -201,7 +207,8 @@ nnoremap <C-]> g<C-]>
 nnoremap <C-LeftMouse> <LeftMouse>g<C-]>
 " nnoremap <C-RightMouse> <C-o>
 nnoremap <C-RightMouse> <LeftMouse><C-t>
-nnoremap <C-n> <C-d>
+nnoremap <C-n> Lzz
+nnoremap <C-u> Hzz
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
@@ -226,15 +233,16 @@ nnoremap <C-k> gkzz
 
 "nmap wm :WMToggle<cr>
 
-nnoremap <F4> :Rgrep<CR><CR><CR>.[h,c]<CR><CR>
+nnoremap <F4> :Rgrep<CR><CR><CR>.[^ao]<CR><CR>
 nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
+" nnoremap <F5> :!ctags -R --c-kinds=+px<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 
 " C，C++ 按F8编译运行
 nnoremap <F8> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
-		exec "!g++ % -o %<"
+		exec "!gcc % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
 		exec "!g++ % -o %<"
@@ -299,10 +307,12 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " Valloric/YouCompleteMe BEGIN
+" TODO vim和ycm都更新到最新版本之后，卡出翔
 Plugin 'Valloric/YouCompleteMe'
-let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_show_diagnostics_ui = 0
+" let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
+" let g:ycm_confirm_extra_conf = 0
+" let g:ycm_show_diagnostics_ui = 0
+
 " Valloric/YouCompleteMe END
 
 " tpope/vim-fugitive BEGIN
@@ -441,6 +451,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 " orgmode BEGIN
 Plugin 'vim-orgmode'
+
+" 以下是依赖插件
+Plugin 'utl.vim'            " Univeral Text Linking
+Plugin 'speeddating.vim'
+Plugin 'calendar.vim'
+Plugin 'SyntaxRange'
+
 "orgmode END
 
 
