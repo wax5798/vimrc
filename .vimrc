@@ -1,3 +1,7 @@
+" #############################################################################
+" tips
+" 1、需要关闭alt的菜单功能和HUB功能
+" #############################################################################
 "##############################################################################
 "
 "一些基础设置
@@ -98,7 +102,7 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
-" 在/usr/include中使用sudo ctags -R --c-kinds=+px-d生成tag文件
+" 在/usr/include中使用sudo ctags *.h -R linux/ sys/ openssl/ netinet/ net/ --c-kinds=+px-d生成tag文件，tags文件太大会造成YCM卡顿
 " set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
 set tags=tags,/usr/include/tags
 
@@ -148,7 +152,8 @@ func SetTitle()
 	endif
 	if expand("%:e") == 'c'
 		call append(line(".")+6, "#include <stdio.h>")
-		call append(line(".")+7, "")
+		call append(line(".")+7, "#include <stdlib.h>")
+		call append(line(".")+8, "")
 	endif
 	if expand("%:e") == 'h'
 		call append(line(".")+6, "#ifndef _".toupper(expand("%:t:r"))."_H")
@@ -173,8 +178,11 @@ vmap <C-c> "+y
 
 inoremap <C-g> <Esc>gUawea
 inoremap <C-l> <Right>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
 inoremap <C-e> <Esc>A
 inoremap <C-a> <Esc>I
+inoremap <C-]>  {<CR>}<CR><ESC>kko
 
 " cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' // TODO 什么用
 
@@ -199,7 +207,9 @@ nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*retur
 
 nnoremap <Leader>n oif (NULL == ) {<CR>}<Esc>kf)i
 
-nnoremap <C-a> :wa<CR>
+" 和speeddating冲突
+" nnoremap <C-a> :wa<CR>
+nnoremap s :wa<CR>
 " nnoremap <F2> :vert diffsplit  " TODO 什么用？
 
 " gd 在函数内部跳转（局部变量）
@@ -235,7 +245,7 @@ nnoremap <C-k> gkzz
 
 nnoremap <F4> :Rgrep<CR><CR><CR>.[^ao]<CR><CR>
 nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
-" nnoremap <F5> :!ctags -R --c-kinds=+px<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
+" nnoremap <F5> :!ctags -R --c-kinds=+px-d<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 
 " C，C++ 按F8编译运行
 nnoremap <F8> :call CompileRunGcc()<CR>
@@ -309,6 +319,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Valloric/YouCompleteMe BEGIN
 " TODO vim和ycm都更新到最新版本之后，卡出翔
 Plugin 'Valloric/YouCompleteMe'
+set completeopt=menu    " 补全时不打开scratch窗口
 " let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 " let g:ycm_confirm_extra_conf = 0
 " let g:ycm_show_diagnostics_ui = 0
@@ -480,5 +491,19 @@ filetype plugin indent on    " required
 " TODO
 " doc 目录下的帮助文件似乎没有效
 " vimdiff, svndiff
+" nerdcommenter怎么控制注释方式，如整块注释和单行注释
 
+" #############################################################################
+"
+" Tips
+"
+" #############################################################################
+
+" 在命令行中，符号%代表当前文件名，如:!wc %
+" :shell 命令启动一个交互的shell会话，使用exit退出此会话
+" :read !{cmd} 命令，把{cmd}命令的输出（包括stderr）读入到当前缓冲区中
+" :write !{cmd} 命令把缓冲区的内容作为指定{cmd}的标准输入，如 :write !sh
+" :w !sudo tee % > /dev/null 命令以超级用户权限保存文件
+" :bd 命令用来关闭当前buffer而不需要推出当前vim
+" !{motion}操作符切换到命令行模式，并把指定{motion}所涵盖的范围预置在命令行上，如 !G
 
