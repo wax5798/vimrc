@@ -8,7 +8,7 @@
 "
 "##############################################################################
 
-set nocompatible            " 去掉讨厌的有关vi一致性模式
+set nocompatible            " 去掉有关vi一致性模式
 filetype plugin on          " 载入文件类型插件
 
 "++++++++++++++++++++++++++++++鼠标与光标+++++++++++++++++++++++++++++++++++++
@@ -47,10 +47,12 @@ set foldlevel=100           " 设置折叠层数为
 "++++++++++++++++++++++++++++++配色与主题+++++++++++++++++++++++++++++++++++++
 syntax on
 " TODO 有时间找一个好看的主题
-colorscheme desert
-"colorscheme molokai
-"highlight NonText guibg=#060606
-"highlight Folded  guibg=#0A0A0A guifg=#9090D0
+" colorscheme desert
+" colorscheme morning
+colorscheme molokai
+let g:rehash256 = 1
+" highlight NonText guibg=#060606
+" highlight Folded  guibg=#0A0A0A guifg=#9090D0
 
 "++++++++++++++++++++++++++++++命令行与状态行+++++++++++++++++++++++++++++++++
 set wildmode=longest,list	" 在命令行模式下tab采用shell的补全方式
@@ -67,11 +69,11 @@ set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 filetype on                 " 侦测文件类型 
 filetype indent on          " 为特定文件类型载入相关缩进文件
 
-au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
+au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=markdown
 au BufRead,BufNewFile *.{go}   set filetype=go
 au BufRead,BufNewFile *.{js}   set filetype=javascript
-au FileType python set noet
-au FileType python set nosmarttab
+" au FileType python set noet
+" au FileType python set nosmarttab
 au FileType php setlocal dict+=~/.vim/dict/php_funclist.dict
 au FileType css setlocal dict+=~/.vim/dict/css.dict
 au FileType c setlocal dict+=~/.vim/dict/c.dict
@@ -102,9 +104,19 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
-" 在/usr/include中使用sudo ctags *.h -R linux/ sys/ openssl/ netinet/ net/ --c-kinds=+px-d生成tag文件，tags文件太大会造成YCM卡顿
-" set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
-set tags=tags,/usr/include/tags
+set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+
+au FileType python set tags=tags
+au FileType python let g:ycm_collect_identifiers_from_tags_files = 1 
+
+" Tlist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+
+" au FileType {c,cpp,h} setlocal tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+" au FileType {c,cpp,h} let g:ycm_collect_identifiers_from_tags_files = 0
+
+au BufEnter set filetype=ss
 
 " 使用quickfix显示cscope的结果
 set cscopequickfix=s-,c-,d-,i-,t-,e-
@@ -127,12 +139,20 @@ func SetTitle()
         call setline(1,"#!/usr/bin/env python")
         call append(line("."),"# coding=utf-8")
 	    call append(line(".")+1, "") 
+	    call append(line(".")+2, "\042\042\042") 
+	    call append(line(".")+3, "\042") 
+	    call append(line(".")+4, "\042 File: ".expand("%:t")) 
+	    call append(line(".")+5, "\042 Author: Wan Xiangjun") 
+	    call append(line(".")+6, "\042 Company: TP-Link Co.Ltd") 
+	    call append(line(".")+7, "\042 Created: ".strftime("%Y-%m-%d")) 
+	    call append(line(".")+8, "\042") 
+	    call append(line(".")+9, "\042\042\042") 
     elseif expand("%:e") == 'rb'
         call setline(1,"#!/usr/bin/env ruby")
         call append(line("."),"# encoding: utf-8")
 	    call append(line(".")+1, "")
     elseif expand("%:e") == 'md'
-        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+        " call setline(1,"<head><meta charset=\"UTF-8\"></head>")
     elseif expand("%:e") == 'java'
         call setline(1,"public class ".expand("%:r"))
 		call append(line("."),"")
@@ -182,30 +202,31 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-e> <Esc>A
 inoremap <C-a> <Esc>I
-inoremap <C-]>  {<CR>}<CR><ESC>kko
+inoremap <C-]>  {<CR>}<ESC>ko
 
 " cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' // TODO 什么用
 
 " 查找C代码符号
-nnoremap <Leader>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
 " 查找本定义
-nnoremap <Leader>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
 " 查找调用本函数的函数
-nnoremap <Leader>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
 " 查找本字符串
-nnoremap <Leader>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
 " 查找本egrep模式
-" nnoremap <Leader>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
 " 查找本文件
-nnoremap <Leader>f :cs find f <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>cf :cs find f <C-R>=expand("<cword>")<CR><CR>
 " 查找包含本文件的文件
-nnoremap <Leader>i :cs find i ^<C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>ci :cs find i ^<C-R>=expand("<cword>")<CR><CR>
 " 查找本函数调用的函数
-nnoremap <Leader>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nnoremap <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
 
-nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*description:<CR>*return:<CR>**/<Esc>
+" 给函数添加说明
+nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*author:<Tab><Tab>WXJ<wanxiangjun@tp-link.com.cn><CR>*description:<CR>*return:<CR>**/<Esc>kk$
 
-nnoremap <Leader>n oif (NULL == ) {<CR>}<Esc>kf)i
+nnoremap <Leader>cn oif (NULL == ) {<CR>}<Esc>kf)i
 
 " 和speeddating冲突
 " nnoremap <C-a> :wa<CR>
@@ -234,6 +255,13 @@ nnoremap <silent> ]c :cnext<CR>
 nnoremap <silent> [C :cfirst<CR>
 nnoremap <silent> ]C :clast<CR>
 
+" 用于location list条目的切换
+" 可以使用:lopen 和 :lclose 打开或关闭location list
+nnoremap <silent> [l :lprevious<CR>
+nnoremap <silent> ]l :lnext<CR>
+nnoremap <silent> [L :lfirst<CR>
+nnoremap <silent> ]L :llast<CR>
+
 nnoremap k gk
 nnoremap gk k
 nnoremap j gj
@@ -255,7 +283,7 @@ func! CompileRunGcc()
 		exec "!gcc % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %<"
+		exec "!g++ % -o %< -std=c++11"
 		exec "!time ./%<"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
@@ -269,11 +297,35 @@ func! CompileRunGcc()
     elseif &filetype == 'go'
 "        exec "!go build %<"
         exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
+    elseif &filetype == 'markdown'
+        exec 'MarkdownPreview'
 	endif
 endfunc
+
+nnoremap <Leader>f :call FormartSrc()<CR>
+func FormartSrc()
+    exec "w"
+    if &filetype == 'c'
+        exec "!astyle --style=ansi -a --suffix=none %"
+    elseif &filetype == 'cpp' || &filetype == 'hpp'
+        exec "r !astyle --style=ansi --one-line=keep-statements -a --suffix=none %> /dev/null 2>&1"
+    elseif &filetype == 'perl'
+        exec "!astyle --style=gnu --suffix=none %"
+    elseif &filetype == 'py'||&filetype == 'python'
+        exec "r !autopep8 -i --aggressive %"
+    elseif &filetype == 'java'
+        exec "!astyle --style=java --suffix=none %"
+    elseif &filetype == 'jsp'
+        exec "!astyle --style=gnu --suffix=none %"
+    elseif &filetype == 'xml'
+        exec "!astyle --style=gnu --suffix=none %"
+    else
+        exec "normal gg=G"
+        return
+    endif
+    exec "e! %"
+endfunc
+
 
 " C,C++的调试
 nnoremap <F9> :call Rungdb()<CR>
@@ -317,13 +369,25 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " Valloric/YouCompleteMe BEGIN
-" TODO vim和ycm都更新到最新版本之后，卡出翔
 Plugin 'Valloric/YouCompleteMe'
 set completeopt=menu    " 补全时不打开scratch窗口
-" let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
-" let g:ycm_confirm_extra_conf = 0
-" let g:ycm_show_diagnostics_ui = 0
-
+let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_open_loclist_on_ycm_diags = 0     " 不自动打开location list
+let g:ycm_collect_identifiers_from_tags_files = 0 " 不使用tags补全
+let g:ycm_complete_in_comments = 1
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '>>'
+" let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_key_invoke_completion = ''
+nnoremap <Leader>yd :YcmDiags<CR>
+nnoremap <Leader>yg :YcmCompleter GoTo<CR>
+nnoremap <Leader>yi :YcmCompleter GoToInclude<CR>
+nnoremap <Leader>yt :YcmCompleter GetType<CR>
+nnoremap <Leader>yf :YcmCompleter FixIt<CR>
+" nnoremap <Leader>yd :YcmCompleter GoToDefinition<CR>
+nnoremap <Leader>yd :YcmCompleter GoToDeclaration<CR>
+hi link YcmWarningSection Todo
 " Valloric/YouCompleteMe END
 
 " tpope/vim-fugitive BEGIN
@@ -470,6 +534,29 @@ Plugin 'calendar.vim'
 Plugin 'SyntaxRange'
 
 "orgmode END
+
+" vim-markdown BEGIN
+" Syntax highlighting, matching rules and mappings for the original Markdown and extensions
+" Plugin 'godlygeek/tabular'
+" Plugin 'plasticboy/vim-markdown'
+" vim-markdown END
+
+" vim-instant-markdown BEGIN
+" Instant Markdown previews from vim
+Plugin 'suan/vim-instant-markdown'
+let g:instant_markdown_autostart = 1
+" vim-instant-markdown END
+
+" markdown-preview.vim BEGIN
+" MarkdownPreview
+Plugin 'iamcco/markdown-preview.vim'
+let g:mkdp_path_to_chrome = "firefox"
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_open = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 0
+let g:mkdp_command_for_global = 0
+" markdown-preview.vim END
 
 
 " All of your Plugins must be added before the following line
