@@ -24,6 +24,7 @@ set et						" 编辑时，把所有tab替换为空格???如果有些语言要求
 set smarttab                " 在行首输入tab时插入宽度为sw的空白，在其他地方按ts处理
 set smartindent             " 开启新行时使用智能自动缩进
 set softtabstop=4           " 统一缩进为4
+set cinoptions=g0           " C++ public不缩进
 set backspace=2             " 使回格键（backspace）正常处理indent, eol, start等          
 let g:html_indent_inctags = "html,body,head,tbody"
 let g:html_indent_script1 = "inc"
@@ -159,7 +160,7 @@ func SetTitle()
 	else 
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%:t")) 
-		call append(line(".")+1, "	> Author: wan xiangjun") 
+		call append(line(".")+1, "	> Author: Wan Xiangjun") 
 		call append(line(".")+2, "	> Mail: ") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
 		call append(line(".")+4, " ************************************************************************/") 
@@ -167,13 +168,15 @@ func SetTitle()
 	endif
 	if expand("%:e") == 'cpp'
 		call append(line(".")+6, "#include <iostream>")
-		call append(line(".")+7, "using namespace std;")
-		call append(line(".")+8, "")
+		call append(line(".")+7, "")
+        call append(line(".")+8, "using namespace std;")
+		call append(line(".")+9, "")
 	endif
 	if expand("%:e") == 'c'
 		call append(line(".")+6, "#include <stdio.h>")
 		call append(line(".")+7, "#include <stdlib.h>")
-		call append(line(".")+8, "")
+		call append(line(".")+8, "#include <stdint.h>")
+		call append(line(".")+9, "")
 	endif
 	if expand("%:e") == 'h'
 		call append(line(".")+6, "#ifndef _".toupper(expand("%:t:r"))."_H")
@@ -238,8 +241,8 @@ nnoremap <C-]> g<C-]>
 nnoremap <C-LeftMouse> <LeftMouse>g<C-]>
 " nnoremap <C-RightMouse> <C-o>
 nnoremap <C-RightMouse> <LeftMouse><C-t>
-nnoremap <C-n> Lzz
-nnoremap <C-u> Hzz
+nnoremap <C-n> zzLzz
+nnoremap <C-u> zzHzz
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
@@ -269,9 +272,11 @@ nnoremap gj j
 nnoremap <C-j> gjzz
 nnoremap <C-k> gkzz
 
+" nnoremap <C-m> oint main(int argc, char *argv[])<CR>{<CR>return 0;<CR>}<ESC>kO
+
 "nmap wm :WMToggle<cr>
 
-nnoremap <F4> :Rgrep<CR><CR><CR>.[^ao]<CR><CR>
+nnoremap <F4> :Rgrep<CR><CR><CR>.[ch]*<CR><CR>
 nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 " nnoremap <F5> :!ctags -R --c-kinds=+px-d<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 
@@ -280,11 +285,15 @@ nnoremap <F8> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
-		exec "!gcc % -o %<"
-		exec "!time ./%<"
+		" exec "!gcc % -o %<"
+		" exec "!time ./%<"
+		exec "!gcc % -g"
+		exec "!time ./a.out"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %< -std=c++11"
-		exec "!time ./%<"
+		" exec "!g++ % -o %< -std=c++11"
+		" exec "!time ./%<"
+		exec "!g++ % -std=c++11 -g"
+		exec "!time ./a.out"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
 		exec "!time java %<"
@@ -378,6 +387,8 @@ let g:ycm_collect_identifiers_from_tags_files = 0 " 不使用tags补全
 let g:ycm_complete_in_comments = 1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '>>'
+let g:ycm_server_python_interpreter='/usr/bin/python'
+let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
 " let g:ycm_key_invoke_completion = '<C-Space>'
 " let g:ycm_key_invoke_completion = ''
 nnoremap <Leader>yd :YcmDiags<CR>
