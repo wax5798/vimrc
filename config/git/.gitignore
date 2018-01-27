@@ -1,0 +1,10 @@
+# 以'#' 开始的行，被视为注释
+# 忽略掉所有文件名为 '.gitignore'的文件
+# .gitignore
+# 忽略所有vim临时文件
+*.swp
+# 忽略所有.o 和 .a 文件
+*.[oa]
+*.so
+# foo.swp例外
+# !foo.swp
