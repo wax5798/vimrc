@@ -51,6 +51,7 @@ syntax on
 " colorscheme desert
 " colorscheme morning
 colorscheme molokai
+" colorscheme default
 let g:rehash256 = 1
 " highlight NonText guibg=#060606
 " highlight Folded  guibg=#0A0A0A guifg=#9090D0
@@ -105,7 +106,8 @@ if has("autocmd")
           \   exe "normal g`\"" |
           \ endif
 endif
-set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+" set tags=tags,/usr/include/tags,~/.vim/linux-2.6.36.x/tags
+set tags=tags,/usr/include/tags,
 
 au FileType python set tags=tags
 au FileType python let g:ycm_collect_identifiers_from_tags_files = 1 
@@ -153,7 +155,28 @@ func SetTitle()
         call append(line("."),"# encoding: utf-8")
 	    call append(line(".")+1, "")
     elseif expand("%:e") == 'md'
-        " call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+        call append(line("."), "<style>")
+        call append(line(".")+1, "h1 {")
+        call append(line(".")+2, "    text-align: center;")
+        call append(line(".")+3, "    border-left: 5px solid #e86422;")
+        call append(line(".")+4, "    border-right: 5px solid #e86422;")
+        call append(line(".")+5, "}")
+        call append(line(".")+6, "h2 {")
+        call append(line(".")+7, "    border-left: 5px solid #ff7f00;")
+        call append(line(".")+8, "    border-right: 5px solid #ff7f00;")
+        call append(line(".")+9, "    padding-left: 10px;")
+        call append(line(".")+10, "}")
+        call append(line(".")+11, "h3 {")
+        call append(line(".")+12, "    border-left: 5px solid #e86422;")
+        call append(line(".")+13, "    padding-left: 8px;")
+        call append(line(".")+14, "}")
+        call append(line(".")+15, "h4 {")
+        call append(line(".")+16, "    border-left: 3px solid #f0a000;")
+        call append(line(".")+17, "    padding-left: 5px;")
+        call append(line(".")+18, "}")
+        call append(line(".")+19, "</style>")
+        call append(line(".")+20, "")
     elseif expand("%:e") == 'java'
         call setline(1,"public class ".expand("%:r"))
 		call append(line("."),"")
@@ -277,7 +300,8 @@ nnoremap <C-k> gkzz
 "nmap wm :WMToggle<cr>
 
 nnoremap <F4> :Rgrep<CR><CR><CR>.[ch]*<CR><CR>
-nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
+" nnoremap <F5> :!ctags -R<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
+nnoremap <F5> :!ctags -R<CR><CR>
 " nnoremap <F5> :!ctags -R --c-kinds=+px-d<CR><CR>:!cscope -Rbq<CR><CR>:cs add ./cscope.out ./<CR>
 
 " C，C++ 按F8编译运行
@@ -387,8 +411,6 @@ let g:ycm_collect_identifiers_from_tags_files = 0 " 不使用tags补全
 let g:ycm_complete_in_comments = 1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '>>'
-let g:ycm_server_python_interpreter='/usr/bin/python'
-let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
 " let g:ycm_key_invoke_completion = '<C-Space>'
 " let g:ycm_key_invoke_completion = ''
 nnoremap <Leader>yd :YcmDiags<CR>
@@ -605,3 +627,6 @@ filetype plugin indent on    " required
 " :bd 命令用来关闭当前buffer而不需要推出当前vim
 " !{motion}操作符切换到命令行模式，并把指定{motion}所涵盖的范围预置在命令行上，如 !G
 
+if filereadable("./.vimconfig")
+    source ./.vimconfig
+endif
