@@ -6,38 +6,38 @@ call vundle#begin('~/.vim_runtime/bundle')
 
 " VundleVim/Vundle.vim BEGIN
 " Vundle: let Vundle manage Vundle, required
-Plugin 'wax5798/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 " VundleVim/Vundle.vim END
 
 " mileszs/ack.vim BEGIN
 " ack.vim: a search tool
 " using 'apt-get install silversearcher-ag' to install ag or 'apt-get install ack-grep' to install ack
-Plugin 'wax5798/ack.vim'
+Plugin 'mileszs/ack.vim'
 nnoremap <F4> viw"zy:Ack! '\b<C-r>z\b' ./ --ignore "*.txt"
 vnoremap <F4> "zy:Ack! '<C-r>z' ./ --ignore "*.txt"
 cnoremap <F4> Ack! -i '' ./<LEFT><LEFT><LEFT><LEFT>
 if executable('ag')
-  let g:ackprg = 'ag -s --nopager --nocolor --nogroup --column'
+    let g:ackprg = 'ag -a -s --nopager --nocolor --nogroup --column'
 endif
 " mileszs/ack.vim END
 
 "junegunn/goyo.vim BEGIN
 " goyo: Distraction-free writing in Vim 
 " Usage - :Goyo [to Toggle Goyo]
-Plugin 'wax5798/goyo.vim'
+Plugin 'junegunn/goyo.vim'
 let g:goyo_width=100
-let g:goyo_margin_top = 2
-let g:goyo_margin_bottom = 2
+let g:goyo_margin_top = 0
+let g:goyo_margin_bottom = 0
 " junegunn/goyo.vim END
 
 " amix/vim-zenroom2 BEGIN
 " vim-zenroom2: A Vim extension that emulates iA Writer environment when editing Markdown, reStructuredText or text files 
-Plugin 'wax5798/vim-zenroom2'
+Plugin 'amix/vim-zenroom2'
 " amix/vim-zenroom2 END
 
 " scrooloose/nerdtree BEGIN
 " nerdtree: A tree explorer plugin for vim
-Plugin 'wax5798/nerdtree'
+Plugin 'scrooloose/nerdtree'
 let NERDTreeIgnore=['.*\.pyc$','.*\.o$','.*\.ko$','.*\.so','.*\.a','.*\.swp','.*\.tar','.*\.tar\..*','.*\.zip']  
 let g:NERDTreeWinPos = "left"
 let NERDTreeShowHidden=0
@@ -46,34 +46,58 @@ let g:NERDTreeWinSize=35
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 " scrooloose/nerdtree END
 
-" w0rp/ale BEGIN
+" ycm-core/YouCompleteMe BEGIN
+Plugin 'ycm-core/YouCompleteMe'
+set completeopt=menu    " 补全时不打开scratch窗口
+let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_open_loclist_on_ycm_diags = 0     " 不自动打开location list
+let g:ycm_collect_identifiers_from_tags_files = 0 " 不使用tags补全
+let g:ycm_complete_in_comments = 1
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '>>'
+
+let g:ycm_key_invoke_completion = '<C-Space>'
+let g:ycm_key_invoke_completion = ''
+
+nnoremap <Leader>yd :YcmDiags<CR>
+nnoremap <Leader>yg :YcmCompleter GoTo<CR>
+nnoremap <Leader>yi :YcmCompleter GoToInclude<CR>
+nnoremap <Leader>yt :YcmCompleter GetType<CR>
+nnoremap <Leader>yf :YcmCompleter FixIt<CR>
+nnoremap <Leader>yd :YcmCompleter GoToDeclaration<CR>
+hi link YcmWarningSection Todo
+" ycm-core/YouCompleteMe END
+
+" dense-analysis/ale BEGIN
 " ale: Asynchronous linting/fixing for Vim and Language Server Protocol (LSP) integration
-Plugin 'wax5798/ale'
+Plugin 'dense-analysis/ale'
 " let g:ale_set_highlights = 0    " Disabling highlighting
 let g:ale_lint_on_text_changed = 'never' " Only run linting when saving the file
 " let g:ale_lint_on_enter = 0    " don't let linters to run on opening a file
 let g:ale_completion_enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:ale_sign_column_always = 1
-" w0rp/ale END
+" dense-analysis/ale END
 
 " tpope/vim-fugitive BEGIN
-Plugin 'wax5798/vim-fugitive'                 
+Plugin 'tpope/vim-fugitive'                 
 " tpope/vim-fugitive END
 
 " Yggdroot/indentLine BEGIN
-Plugin 'wax5798/indentLine'
+Plugin 'Yggdroot/indentLine'
 let g:indentLine_char='┊'                 " this feature only works with files whose encoding is UTF-8
 " Yggdroot/indentLine END
 
 " EasyMotion BEGIN
 Plugin 'EasyMotion'
 let g:EasyMotion_leader_key='<Space>'
+hi EasyMotionTarget ctermbg=none ctermfg=blue
 " EasyMotion END
 
 " kien/ctrlp.vim BEGIN
 " 使用<C-p>调用CtrlP, 帮助条目:ctrlp-commands, ctrlp-extensions, ctrlp-mappings, ctrlp-options
-Plugin 'wax5798/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 let g:ctrlp_working_path_mode = 'w'
 let g:ctrlp_by_filename = 1
 nmap <Leader>pb :CtrlPBuffer<CR>
@@ -85,20 +109,21 @@ nmap <Leader>pm :CtrlPMRU<CR>
 " kien/ctrlp.vim END
 
 " junegunn/fzf BEGIN
-" Plugin 'wax5798/fzf'
+" Plugin 'junegunn/fzf'
 " junegunn/fzf END
 
 " majutsushi/tagbar BEGIN
-" Plugin 'wax5798/tagbar'
-" let g:tagbar_width=35
-" let g:tagbar_autofocus=0
-" nmap <F6> :TagbarToggle<CR>
+Plugin 'majutsushi/tagbar'
+let g:tagbar_width=35
+let g:tagbar_autofocus=0
+let g:tagbar_left = 1
+nmap <F6> :TagbarToggle<CR>
 " majutsushi/tagbar END
 
 " scrooloose/nerdcommenter BEGIN
 " Vim plugin for intensely orgasmic commenting
 " usage:[count]<leader>c<space> |NERDComToggleComment|
-Plugin 'wax5798/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1       " Add spaces after comment delimiters by default
 let g:NERDCompactSexyComs = 1   " Use compact syntax for prettified multi-line comments
 let g:NERDDefaultAlign = 'left' " Align line-wise comment delimiters flush left instead of following code indentation
@@ -110,8 +135,8 @@ let g:NERDTrimTrailingWhitespace = 1    " Enable trimming of trailing whitespace
 
 " vim-airline/vim-airline BEGIN
 " lean & mean status/tabline for vim that's light as air
-Plugin 'wax5798/vim-airline'
-Plugin 'wax5798/vim-airline-themes'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 let g:airline_theme='molokai'                           " 配置主题：https://github.com/vim-airline/vim-airline/wiki/Screenshots
 let g:airline#extensions#tabline#enabled = 1            " Smarter tab line
@@ -132,23 +157,43 @@ let g:airline_symbols.linenr = '⭡'
 
 " vim-markdown BEGIN
 " Syntax highlighting, matching rules and mappings for the original Markdown and extensions
-Plugin 'wax5798/tabular'
-Plugin 'wax5798/vim-markdown'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal = 0
 " vim-markdown END
 
 " vim-instant-markdown BEGIN
 " Instant Markdown previews from vim
-" Plugin 'wax5798/vim-instant-markdown'
-" let g:instant_markdown_autostart = 1
+" use command :InstantMarkdownPreview to show the preview
+Plugin 'instant-markdown/vim-instant-markdown'
+let g:instant_markdown_autostart = 0
 " nnoremap <Leader>mc O<div align="center"><ESC>jo</div><ESC>
 " vim-instant-markdown END
 
+" cfg.vim BEGIN
+" Plugin 'wax5798/cfg.vim'
+function Cfg_related_reload()
+    if exists("g:cfg_loaded")
+        nnoremap <F5> :call Tags_generate(g:cfg_dir)<CR>
+        let &tags = &tags . "," . g:cfg_dir . "/tags"
+
+        if filereadable(g:cfg_dir . '/config.vim')
+            exe 'source' .  g:cfg_dir . '/config.vim'
+        endif
+
+" config ag .agignore file
+        if executable('ag')
+            let g:ackprg = 'ag -a -s --nopager --nocolor --nogroup --column -p ' . g:cfg_dir . '/.agignore'
+        endif
+    endif
+endfunction
+" cfg.vim END
+
 " markdown-preview.vim BEGIN
 " MarkdownPreview
-Plugin 'wax5798/markdown-preview.vim'
-let g:mkdp_path_to_chrome = "firefox"
+Plugin 'iamcco/markdown-preview.vim'
+let g:mkdp_path_to_chrome = 'firefox'
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_open = 0
 let g:mkdp_auto_close = 1
@@ -156,14 +201,43 @@ let g:mkdp_refresh_slow = 0
 let g:mkdp_command_for_global = 0
 " markdown-preview.vim END
 
+
+" markdown-preview.nvim BEGIN
+" Plugin 'wax5798/markdown-preview.nvim'
+" let g:mkdp_auto_start = 0
+" let g:mkdp_auto_close = 0
+" let g:mkdp_refresh_slow = 0
+" let g:mkdp_command_for_global = 0
+" let g:mkdp_open_to_the_world = 0
+" let g:mkdp_open_ip = ''
+" let g:mkdp_browser = 'firefox'
+" let g:mkdp_echo_preview_url = 0
+" let g:mkdp_browserfunc = ''
+" let g:mkdp_preview_options = {
+"     \ 'mkit': {},
+"     \ 'katex': {},
+"     \ 'uml': {},
+"     \ 'maid': {},
+"     \ 'disable_sync_scroll': 0,
+"     \ 'sync_scroll_type': 'middle',
+"     \ 'hide_yaml_meta': 1,
+"     \ 'sequence_diagrams': {}
+"     \ }
+"
+" let g:mkdp_markdown_css = ''
+" let g:mkdp_highlight_css = ''
+" let g:mkdp_port = ''
+" let g:mkdp_page_title = '「${name}」'
+" markdown-preview.nvim END
+
 " Shougo/neocomplete.vim BEGIN
-Plugin 'wax5798/neocomplete.vim'
-source ~/.vim_runtime/vimrcs/plugins_config_neocomplete.vim
+" Plugin 'wax5798/neocomplete.vim'
+" source ~/.vim_runtime/vimrcs/plugins_config_neocomplete.vim
 " Shougo/neocomplete.vim END
 
 " ervandew/supertab BEGIN
-Plugin 'wax5798/supertab'
-let g:SuperTabDefaultCompletionType = "<c-n>"
+" Plugin 'wax5798/supertab'
+" let g:SuperTabDefaultCompletionType = "<c-n>"
 " ervandew/supertab  END
 
 " All of your Plugins must be added before the following line

@@ -2,11 +2,11 @@
 
 set -e
 
-mkdir ~/.vim_runtime
+# mkdir ~/.vim_runtime
 cd ~/.vim_runtime
 
-git clone git@github.com:wax5798/vimrc.git ./
-
+# git clone git@github.com:wax5798/vimrc.git ./
+# git clone https://github.com/wax5798/vimrc.git
 echo 'set runtimepath+=~/.vim_runtime
 
 source ~/.vim_runtime/vimrcs/basic.vim
@@ -39,4 +39,5 @@ echo "*.pyc" >> ~/.agignore
 
 echo "Installed the Ultimate Vim configuration successfully! Enjoy :-)"
 echo "And you should install the following tools manually"
+echo "- ctags"
 echo "- silversearcher-ag or ack-grep"

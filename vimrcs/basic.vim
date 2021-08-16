@@ -17,7 +17,7 @@ set cursorline              " 高亮光标所在行
 "++++++++++++++++++++++++++++++空白与缩进+++++++++++++++++++++++++++++++++++++
 set sw=4	 	    		" 缩进代码时，缩进量为4
 set ts=4         	    	" 一个制表符的长度为4
-set et						" 编辑时，把所有tab替换为空格
+" set et						" 编辑时，把所有tab替换为空格
 set smarttab                " 在行首输入tab时插入宽度为sw的空白，在其他地方按ts处理
 set smartindent             " 开启新行时使用智能自动缩进
 set softtabstop=4           " 统一缩进为4
@@ -53,7 +53,8 @@ if $COLORTERM == 'gnome-terminal'
 endif
 
 try
-    colorscheme desert
+    " colorscheme desert
+    colorscheme elflord
 catch
 endtry
     
@@ -69,7 +70,8 @@ set wildmenu                " turn on the wild menu
 "++++++++++++++++++++++++++++++解决乱码问题++++++++++++++++++++++++++++++++++
 set encoding=utf-8          
 set termencoding=utf-8                                                    
-set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
+" set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
+set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936
 
 "++++++++++++++++++++++++++++++文件类型++++++++++++++++++++++++++++++++++++++
 filetype on                 " 侦测文件类型 
@@ -105,6 +107,8 @@ set confirm                 " 在处理未保存或只读文件的时候，弹�
 set autoread                " 文件在Vim之外修改过,自动重新读入
 set lazyredraw              " Don't redraw while executing macros (good performance config)
 set wrap                    " 当一行太长时，会根据自动显示换行，换行长度由 textwidth 设置
+" 修改查找字符串高亮颜色
+hi Search term=standout ctermfg=0 ctermbg=3 guifg=Black guibg=Yellow
 
 " When editing a file, always jump to the last cursor position
 if has("autocmd")
@@ -167,7 +171,7 @@ cnoremap w w !sudo tee % > /dev/null
 
 "++++++++++++++++++++++++++++++ normal mode +++++++++++++++++++++++++++++++++++++
 " 给函数添加说明
-nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*author:<Tab><Tab>WXJ<wanxiangjun@tp-link.com.cn><CR>*description:<CR>*return:<CR>**/<Esc>kk$
+nnoremap <Leader>m "xyiwO/**<CR>*function:<Tab><C-r>x<CR>*author:<Tab><Tab><wanxiangjun@tp-link.com.cn><CR>*description:<CR>*return:<CR>**/<Esc>kk$
 
 " 保存文件
 nnoremap s :wa<CR>
@@ -219,7 +223,8 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
 
-nnoremap <F5> :!ctags -R<CR><CR>
+" nnoremap <F5> :!ctags -R<CR><CR>
+nnoremap <F5> :call Tags_generate("./")<CR>
 
 " C，C++ 按F8编译运行
 nnoremap <F8> :call CompileRunGcc()<CR>
@@ -310,23 +315,19 @@ func SetTitle()
         call append(line(".")+5, "}")
         call append(line(".")+6, "h2 {")
         call append(line(".")+7, "    border-left: 5px solid #ff7f00;")
-        call append(line(".")+8, "    border-right: 5px solid #ff7f00;")
-        call append(line(".")+9, "    padding-left: 10px;")
-        call append(line(".")+10, "}")
-        call append(line(".")+11, "h3 {")
-        call append(line(".")+12, "    border-left: 5px solid #e86422;")
-        call append(line(".")+13, "    padding-left: 8px;")
-        call append(line(".")+14, "}")
-        call append(line(".")+15, "h4 {")
-        call append(line(".")+16, "    border-left: 3px solid #f0a000;")
-        call append(line(".")+17, "    padding-left: 5px;")
-        call append(line(".")+18, "}")
-        call append(line(".")+19, "</style>")
-        call append(line(".")+20, "")
-        call append(line(".")+21, "Module:")
-        call append(line(".")+22, "Auther: Wan Xiangjun")
-        call append(line(".")+23, "")
-        call append(line(".")+24, "Release log:")
+        call append(line(".")+8, "    padding-left: 10px;")
+        call append(line(".")+9, "}")
+        call append(line(".")+10, "h3 {")
+        call append(line(".")+11, "    border-left: 5px solid #e86422;")
+        call append(line(".")+12, "    padding-left: 8px;")
+        call append(line(".")+13, "}")
+        call append(line(".")+14, "h4 {")
+        call append(line(".")+15, "    border-left: 3px solid #f0a000;")
+        call append(line(".")+16, "    padding-left: 5px;")
+        call append(line(".")+17, "}")
+        call append(line(".")+18, "</style>")
+        call append(line(".")+19, "")
+        call append(line(".")+20, "Release log:")
     elseif expand("%:e") == 'java'
         call setline(1,"public class ".expand("%:r"))
 		call append(line("."),"")
@@ -384,6 +385,7 @@ func! CompileRunGcc()
         exec "!time go run %"
     elseif &filetype == 'markdown'
         exec 'MarkdownPreview'
+        " exec 'InstantMarkdownPreview'
 	endif
 endfunc
 
@@ -411,6 +413,17 @@ func FormartSrc()
     exec "e! %"
 endfunc
 
+function Tags_generate(outdir)
+    " let l:cmd = 'ctags -R ' . getcwd() . ' -f ' . a:outdir . '/tags'
+    if exists("g:tags_dir")
+        let l:cmd = 'ctags -f ' . a:outdir . '/tags' . ' -R ' . g:tags_dir
+    else
+        let l:cmd = 'ctags -f ' . a:outdir . '/tags' . ' -R ' . getcwd()
+    endif
+    echo "cmd: " . l:cmd
+    call system(l:cmd)
+    echo "done"
+endfunction
 
 " #############################################################################
 "
@@ -425,3 +438,4 @@ endfunc
 " :w !sudo tee % > /dev/null 命令以超级用户权限保存文件
 " :bd 命令用来关闭当前buffer而不需要推出当前vim
 " !{motion}操作符切换到命令行模式，并把指定{motion}所涵盖的范围预置在命令行上，如 !G
+" 可以通过 %!xxd 和 %!xxd -r 在文本与十六进制之间转换
