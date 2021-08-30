@@ -88,6 +88,10 @@ au FileType python set noet
 au FileType python set nosmarttab
 au FileType python let g:ycm_collect_identifiers_from_tags_files = 1 
 
+au FileType vue,javascript set expandtab
+au FileType vue,javascript set sw=2
+au FileType vue,javascript set ts=2
+
 au FileType c set tags+=/usr/include/tags
 
 au FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o "取消自动注释,这条配置需要放在filetype plugin on 之后，否则无效???

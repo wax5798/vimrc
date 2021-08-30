@@ -141,18 +141,18 @@ Plugin 'vim-airline/vim-airline-themes'
 let g:airline_theme='molokai'                           " 配置主题：https://github.com/vim-airline/vim-airline/wiki/Screenshots
 let g:airline#extensions#tabline#enabled = 1            " Smarter tab line
 let g:airline#extensions#tabline#buffer_nr_show = 1     " 显示buffer的序号
-let g:airline_powerline_fonts = 1                       " 以下配置分隔符，需要安装powerline字体
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'                           
-let g:airline_right_alt_sep = '⮃'
-let g:airline_symbols.branch = '⭠'
-let g:airline_symbols.readonly = '⭤'
-let g:airline_symbols.linenr = '⭡'
+" let g:airline_powerline_fonts = 1                       " 以下配置分隔符，需要安装powerline字体
+" if !exists('g:airline_symbols')
+"     let g:airline_symbols = {}
+" endif
+"
+" let g:airline_left_sep = '⮀'
+" let g:airline_left_alt_sep = '⮁'
+" let g:airline_right_sep = '⮂'
+" let g:airline_right_alt_sep = '⮃'
+" let g:airline_symbols.branch = '⭠'
+" let g:airline_symbols.readonly = '⭤'
+" let g:airline_symbols.linenr = '⭡'
 " vim-airline END
 
 " vim-markdown BEGIN
