@@ -15,9 +15,10 @@ set mouse=a                 " 可以使用鼠标
 set cursorline              " 高亮光标所在行
 
 "++++++++++++++++++++++++++++++空白与缩进+++++++++++++++++++++++++++++++++++++
+set expandtab				" 把 tab 转换成空格
 set sw=4	 	    		" 缩进代码时，缩进量为4
 set ts=4         	    	" 一个制表符的长度为4
-" set et						" 编辑时，把所有tab替换为空格
+" set et					" 编辑时，把所有tab替换为空格
 set smarttab                " 在行首输入tab时插入宽度为sw的空白，在其他地方按ts处理
 set smartindent             " 开启新行时使用智能自动缩进
 set softtabstop=4           " 统一缩进为4
@@ -54,7 +55,7 @@ endif
 
 try
     " colorscheme desert
-    colorscheme elflord
+    colorscheme darkblue
 catch
 endtry
     
@@ -336,12 +337,12 @@ func SetTitle()
         call setline(1,"public class ".expand("%:r"))
 		call append(line("."),"")
 	else 
-		call setline(1, "/*************************************************************************") 
+		call setline(1, "/*******************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%:t")) 
 		call append(line(".")+1, "	> Author: Wan Xiangjun") 
-		call append(line(".")+2, "	> Mail: ") 
+		call append(line(".")+2, "	> Mail: xiangjunwan@deeproute.ai") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
-		call append(line(".")+4, " ************************************************************************/") 
+		call append(line(".")+4, " ******************************************************************************/") 
 		call append(line(".")+5, "")
 	endif
 	if expand("%:e") == 'cpp'

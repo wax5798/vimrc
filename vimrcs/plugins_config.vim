@@ -48,16 +48,21 @@ nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 " ycm-core/YouCompleteMe BEGIN
 Plugin 'ycm-core/YouCompleteMe'
-set completeopt=menu    " 补全时不打开scratch窗口
-let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
+set completeopt=menu      " 补全时不打开scratch窗口
+" set completeopt-=preview    " 补全内容不以分割子窗口形式出现，只显示补全列表
+" let g:ycm_global_ycm_extra_conf='~/.vim/config/ycm_extra_conf/default/.ycm_extra_conf.py'
+let g:ycm_show_diagnostics_ui = 1       " 开启实时错误或者warning的检测
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_open_loclist_on_ycm_diags = 0     " 不自动打开location list
-let g:ycm_collect_identifiers_from_tags_files = 0 " 不使用tags补全
+let g:ycm_collect_identifiers_from_tags_files = 1 
 let g:ycm_complete_in_comments = 1
+let g:ycm_min_num_of_chars_for_completion=2
+let g:ycm_cache_omnifunc=0
+" let g:ycm_seed_identifiers_with_syntax=1
 let g:ycm_error_symbol = '>>'
 let g:ycm_warning_symbol = '>>'
 
-let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_key_invoke_completion = '<C-Space>'
 let g:ycm_key_invoke_completion = ''
 
 nnoremap <Leader>yd :YcmDiags<CR>
@@ -159,7 +164,7 @@ let g:airline#extensions#tabline#buffer_nr_show = 1     " 显示buffer的序号
 " Syntax highlighting, matching rules and mappings for the original Markdown and extensions
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
-let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_folding_disabled = 0
 let g:vim_markdown_conceal = 0
 " vim-markdown END
 
@@ -182,6 +187,10 @@ function Cfg_related_reload()
             exe 'source' .  g:cfg_dir . '/config.vim'
         endif
 
+        if filereadable(g:cfg_dir . '/.ycm_extra_conf.py')
+            let g:ycm_global_ycm_extra_conf=g:cfg_dir . '/.ycm_extra_conf.py'
+        endif
+
 " config ag .agignore file
         if executable('ag')
             let g:ackprg = 'ag -a -s --nopager --nocolor --nogroup --column -p ' . g:cfg_dir . '/.agignore'
@@ -192,42 +201,42 @@ endfunction
 
 " markdown-preview.vim BEGIN
 " MarkdownPreview
-Plugin 'iamcco/markdown-preview.vim'
-let g:mkdp_path_to_chrome = 'firefox'
-let g:mkdp_auto_start = 0
-let g:mkdp_auto_open = 0
-let g:mkdp_auto_close = 1
-let g:mkdp_refresh_slow = 0
-let g:mkdp_command_for_global = 0
+" Plugin 'iamcco/markdown-preview.vim'
+" let g:mkdp_path_to_chrome = 'firefox'
+" let g:mkdp_auto_start = 0
+" let g:mkdp_auto_open = 0
+" let g:mkdp_auto_close = 1
+" let g:mkdp_refresh_slow = 0
+" let g:mkdp_command_for_global = 0
 " markdown-preview.vim END
 
 
 " markdown-preview.nvim BEGIN
-" Plugin 'wax5798/markdown-preview.nvim'
-" let g:mkdp_auto_start = 0
-" let g:mkdp_auto_close = 0
-" let g:mkdp_refresh_slow = 0
-" let g:mkdp_command_for_global = 0
-" let g:mkdp_open_to_the_world = 0
-" let g:mkdp_open_ip = ''
-" let g:mkdp_browser = 'firefox'
-" let g:mkdp_echo_preview_url = 0
-" let g:mkdp_browserfunc = ''
-" let g:mkdp_preview_options = {
-"     \ 'mkit': {},
-"     \ 'katex': {},
-"     \ 'uml': {},
-"     \ 'maid': {},
-"     \ 'disable_sync_scroll': 0,
-"     \ 'sync_scroll_type': 'middle',
-"     \ 'hide_yaml_meta': 1,
-"     \ 'sequence_diagrams': {}
-"     \ }
-"
-" let g:mkdp_markdown_css = ''
-" let g:mkdp_highlight_css = ''
-" let g:mkdp_port = ''
-" let g:mkdp_page_title = '「${name}」'
+Plugin 'iamcco/markdown-preview.nvim'
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 1
+let g:mkdp_refresh_slow = 0
+let g:mkdp_command_for_global = 0
+let g:mkdp_open_to_the_world = 0
+let g:mkdp_open_ip = ''
+let g:mkdp_browser = 'firefox'
+let g:mkdp_echo_preview_url = 0
+let g:mkdp_browserfunc = ''
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1,
+    \ 'sequence_diagrams': {}
+    \ }
+
+let g:mkdp_markdown_css = ''
+let g:mkdp_highlight_css = ''
+let g:mkdp_port = ''
+let g:mkdp_page_title = '「${name}」'
 " markdown-preview.nvim END
 
 " Shougo/neocomplete.vim BEGIN
